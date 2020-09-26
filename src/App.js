@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import CandleChart from "./candleChart";
 import { initialData, newData } from "./data";
@@ -6,23 +6,23 @@ import { initialData, newData } from "./data";
 function App() {
   const [data, setData] = useState([]);
 
-  function initData() {
+  const resetData = () => {
     setData(initialData);
-  }
+  };
 
-  function updateData() {
+  const updateData = () => {
     setData(newData);
-  }
+  };
 
   useEffect(() => {
-    initData();
+    resetData();
   }, []);
 
   return (
     <div className="App" style={{ height: "500px", flex: 1 }}>
       <div>
-        <button onClick={() => updateData()}>Change Data</button>
-        <button onClick={() => initData()}>init Data</button>
+        <button onClick={() => updateData()}>Update Data</button>
+        <button onClick={() => resetData()}>Reset Data</button>
       </div>
       {data[1] && <CandleChart priceData={data} />}
     </div>

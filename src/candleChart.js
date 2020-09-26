@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
 
-export default function CandleChart({ priceData, volumeData }) {
+export default function CandleChart({ priceData }) {
   const chartContainerRef = useRef();
   const chart = useRef();
 
-  const updateChart = () => {
-    console.log(chartContainerRef, "##########", chart);
+  const initChart = () => {
+    while (chartContainerRef.current.hasChildNodes()) {
+      chartContainerRef.current.removeChild(
+        chartContainerRef.current.firstChild
+      );
+    }
+  };
 
+  const updateChart = () => {
     chart.current = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: chartContainerRef.current.clientHeight,
@@ -34,8 +40,6 @@ export default function CandleChart({ priceData, volumeData }) {
       },
     });
 
-    console.log(chartContainerRef, "@@@@@@@@@@", chart);
-
     const candleSeries = chart.current.addCandlestickSeries({
       upColor: "#4bffb5",
       downColor: "#ff4976",
@@ -57,12 +61,7 @@ export default function CandleChart({ priceData, volumeData }) {
   };
 
   useEffect(() => {
-    while (chartContainerRef.current.hasChildNodes()) {
-      chartContainerRef.current.removeChild(
-        chartContainerRef.current.firstChild
-      );
-    }
-
+    initChart();
     updateChart();
   }, [priceData]);
 
