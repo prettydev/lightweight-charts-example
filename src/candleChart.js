@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
-export default function CandleChart({priceData, volumeData}) {
+
+export default function CandleChart({ priceData, volumeData }) {
   const chartContainerRef = useRef();
   const chart = useRef();
 
-  useEffect(() => {
-  
+  const updateChart = () => {
+    console.log(chartContainerRef, "##########", chart);
+
     chart.current = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: chartContainerRef.current.clientHeight,
@@ -31,7 +33,9 @@ export default function CandleChart({priceData, volumeData}) {
         borderColor: "#485c7b",
       },
     });
-  
+
+    console.log(chartContainerRef, "@@@@@@@@@@", chart);
+
     const candleSeries = chart.current.addCandlestickSeries({
       upColor: "#4bffb5",
       downColor: "#ff4976",
@@ -43,7 +47,6 @@ export default function CandleChart({priceData, volumeData}) {
 
     candleSeries.setData(priceData);
 
-
     candleSeries.createPriceLine({
       price: 4.53,
       color: "#000",
@@ -51,14 +54,26 @@ export default function CandleChart({priceData, volumeData}) {
     });
 
     chart.current.timeScale().fitContent();
+  };
 
+  useEffect(() => {
+    while (chartContainerRef.current.hasChildNodes()) {
+      chartContainerRef.current.removeChild(
+        chartContainerRef.current.firstChild
+      );
+    }
+
+    updateChart();
   }, [priceData]);
-
-  
 
   return (
     <>
-      <div ref={chartContainerRef} id="test-id" className="chart-container" style={{height: '100%'}} />
+      <div
+        ref={chartContainerRef}
+        id="test-id"
+        className="chart-container"
+        style={{ height: "100%" }}
+      />
     </>
   );
 }
